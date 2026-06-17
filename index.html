@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wedding Invitation | Vikram & Ananya</title>
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="Karthik Raaja  & Radhika as they begin their forever.Grab all the event details and RSVP"
+    />
+    <meta
+      name="keywords"
+      content="Wedding Invitation, Karthik Raaja and Radhika, Wedding RSVP, Luxury Wedding Invite"
+    />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- FontAwesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Background Canvas for Particles and Fireworks -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Main Mobile App Wrapper -->
+    <div class="app-container" id="appContainer">
+      <!-- 1. OPENING SCREEN -->
+      <section id="opening-screen" class="active-snap">
+        <div class="opening-content">
+          <div class="opening-logo">
+            <span>V</span>
+            <i class="fa-solid fa-heart gold-heart animate-heart"></i>
+            <span>A</span>
+          </div>
+          <h2 class="opening-subtitle">
+            Are Invited to Celebrate a Lifetime of Togetherness
+          </h2>
+          <div class="open-button-container">
+            <button id="btn-open-invite" class="btn-glow-gold">
+              <span class="btn-text">Tap to Open</span>
+              <span class="btn-ripple"></span>
+            </button>
+          </div>
+          <p class="opening-footer">
+            Best experienced with sound on
+            <i class="fa-solid fa-volume-high"></i>
+          </p>
+        </div>
+      </section>
+
+      <!-- 2. WELCOME PAGE -->
+      <!-- EDITABLE: Couple Initial Monogram and Header -->
+      <section id="welcome-page">
+        <div class="luxury-frame">
+          <div class="frame-ornament top-ornament"></div>
+          <div class="content-wrapper">
+            <p class="invite-prefix">Together with their families</p>
+
+            <!-- EDITABLE: Names of the Couple -->
+            <h1 class="bride-name gold-text">Radhika P</h1>
+            <div class="heart-divider">
+              <span class="line"></span>
+              <i class="fa-solid fa-heart gold-heart"></i>
+              <span class="line"></span>
+            </div>
+            <h1 class="groom-name gold-text">Karthik Raaja D</h1>
+
+            <p class="invite-suffix">
+              Request the honour of your presence at their wedding celebration
+            </p>
+          </div>
+          <div class="frame-ornament bottom-ornament"></div>
+        </div>
+      </section>
+
+      <!-- 3. INVITATION PAGE -->
+      <section id="invitation-page">
+        <div class="glass-card fade-in-up">
+          <h2 class="section-title gold-text">The Invitation</h2>
+          <p class="invitation-text">
+            "Love is a journey that starts with forever. Two hearts, one beat,
+            and a promise to share a lifetime of adventures together."
+          </p>
+          <div class="gold-divider"></div>
+          <p class="invitation-subtext">
+            We invite you to share in our joy and celebrate the beginning of our
+            new chapter.
+          </p>
+          <button
+            class="btn-gold-outline next-section-trigger"
+            data-target="scratch-page"
+          >
+            Reveal Secret Date <i class="fa-solid fa-chevron-down"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- 4. SCRATCH & REVEAL WEDDING DATE -->
+      <section id="scratch-page">
+        <div class="scratch-card-container glass-card">
+          <h2 class="section-title gold-text">Save The Date</h2>
+          <p class="scratch-instruction">
+            Scratch the golden card below to reveal our wedding date!
+          </p>
+
+          <div class="scratch-area" id="scratchArea">
+            <!-- The hidden content to reveal -->
+            <div class="revealed-content">
+              <!-- BTS Girl & Anime Boy Illustration -->
+              <img
+                src="assets/couple-portrait.png"
+                alt="Couple Illustration"
+                class="couple-img-illustration"
+              />
+
+              <div class="revealed-date-details">
+                <!-- EDITABLE: Secret Wedding Date -->
+                <h3 class="revealed-date gold-text">August 30, 2026</h3>
+                <p class="revealed-venue">Ramakrish Palace, Chennai</p>
+              </div>
+            </div>
+            <!-- Canvas layer for scratching -->
+            <canvas id="scratch-canvas"></canvas>
+          </div>
+
+          <button
+            id="btn-after-scratch"
+            class="btn-glow-gold hidden-btn next-section-trigger"
+            data-target="countdown-page"
+          >
+            Join the Celebration
+          </button>
+        </div>
+      </section>
+
+      <!-- 5. COUNTDOWN & CELEBRATION -->
+      <section id="countdown-page">
+        <div class="glass-card">
+          <h2 class="section-title gold-text">Count Every Second</h2>
+          <p class="countdown-description">Until we say "I Do" ❤️</p>
+
+          <!-- Live Countdown -->
+          <!-- EDITABLE: js/app.js handles the target wedding date (e.g. Dec 18, 2026) -->
+          <div class="countdown-container">
+            <div class="countdown-box">
+              <span id="days" class="time-num gold-text">00</span>
+              <span class="time-label">Days</span>
+            </div>
+            <div class="countdown-box">
+              <span id="hours" class="time-num gold-text">00</span>
+              <span class="time-label">Hours</span>
+            </div>
+            <div class="countdown-box">
+              <span id="minutes" class="time-num gold-text">00</span>
+              <span class="time-label">Min</span>
+            </div>
+            <div class="countdown-box">
+              <span id="seconds" class="time-num gold-text">00</span>
+              <span class="time-label">Sec</span>
+            </div>
+          </div>
+
+          <div class="small-couple-gallery">
+            <div class="gallery-frame">
+              <img
+                src="assets/couple-portrait.png"
+                alt="Gallery Photo"
+                class="gallery-photo"
+              />
+              <div class="gallery-glow"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. LOVE STORY & TIMELINE -->
+      <section id="story-page">
+        <div class="glass-card scrollable-card">
+          <h2 class="section-title gold-text">Our Love Story</h2>
+
+          <div class="story-timeline">
+            <div class="story-item">
+              <div class="story-badge">
+                <i class="fa-solid fa-comments"></i>
+              </div>
+              <div class="story-content">
+                <span class="story-date gold-text">June 2023</span>
+                <h4>How We Met</h4>
+                <p>
+                  It started with a simple text, which turned into late-night
+                  calls and endless conversations. We knew we found something
+                  special.
+                </p>
+              </div>
+            </div>
+
+            <div class="story-item">
+              <div class="story-badge"><i class="fa-solid fa-mug-hot"></i></div>
+              <div class="story-content">
+                <span class="story-date gold-text">October 2024</span>
+                <h4>First Date</h4>
+                <p>
+                  A quiet coffee shop, nervous laughs, and a shared dream of
+                  exploring the world together. The spark was undeniable.
+                </p>
+              </div>
+            </div>
+
+            <div class="story-item">
+              <div class="story-badge"><i class="fa-solid fa-ring"></i></div>
+              <div class="story-content">
+                <span class="story-date gold-text">December 2025</span>
+                <h4>The Proposal</h4>
+                <p>
+                  Under a canopy of fairy lights, he got down on one knee, and
+                  she said "Yes!" through happy tears.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. EVENT DETAILS -->
+      <section id="events-page">
+        <div class="glass-card scrollable-card">
+          <h2 class="section-title gold-text">Wedding Events</h2>
+          <p class="section-subtitle">Please join us for all the rituals</p>
+
+          <div class="events-list">
+            <!-- Event 1: Reception -->
+            <div class="event-card">
+              <div class="event-icon-box">
+                <i class="fa-solid fa-champagne-glasses event-icon"></i>
+              </div>
+              <div class="event-info">
+                <h4 class="gold-text">Reception</h4>
+                <p class="event-time">
+                  <i class="fa-regular fa-clock"></i> August 29, 2026 | 6:30 PM onwards
+                </p>
+                <p class="event-loc">
+                  <i class="fa-solid fa-location-dot"></i> Grand Ballroom, Ramakrish Palace, Chennai
+                </p>
+              </div>
+            </div>
+
+            <!-- Event 2: Wedding Ceremony -->
+            <div class="event-card highlight-card">
+              <div class="event-icon-box">
+                <i class="fa-solid fa-gopuram event-icon"></i>
+              </div>
+              <!-- EDITABLE: Wedding Event Details -->
+              <div class="event-info">
+                <h4 class="gold-text">The Wedding Ceremony</h4>
+                <p class="event-time">
+                  <i class="fa-regular fa-clock"></i> August 30, 2026 | 6:30 AM to 9:00 AM
+                </p>
+                <p class="event-loc">
+                  <i class="fa-solid fa-location-dot"></i> Muhurtham Hall, Ramakrish Palace, Chennai
+                </p>
+              </div>
+            </div>
+
+            <!-- Event 3: Reception -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. VENUE MAP & CALENDAR -->
+      <section id="venue-page">
+        <div class="glass-card">
+          <h2 class="section-title gold-text">The Venue</h2>
+
+          <div class="venue-details-card">
+            <div class="venue-icon">
+              <i class="fa-solid fa-hotel gold-text"></i>
+            </div>
+            <!-- EDITABLE: Venue Name and Details -->
+            <h3 class="venue-name">Ramakrish Palace</h3>
+            <p class="venue-address">
+              110, grand southern Trunk Rd, Shanthi Nagar, Chromeper, Chennai,
+              Tamil Nadu 600044
+            </p>
+
+            <div class="venue-actions">
+              <!-- EDITABLE: Venue Google Maps Location -->
+              <a
+                href="https://maps.app.goo.gl/qLSdi8WjnhYmKgUu8"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-gold-action"
+              >
+                <i class="fa-solid fa-map-location-dot"></i> Open Google Maps
+              </a>
+
+              <button id="btn-add-calendar" class="btn-gold-action">
+                <i class="fa-solid fa-calendar-check"></i> Add to Calendar
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. FAMILY SECTION -->
+      <section id="family-page">
+        <div class="glass-card scrollable-card">
+          <h2 class="section-title gold-text">The Families</h2>
+
+          <div class="family-grid">
+            <div class="family-side">
+              <h3 class="family-title gold-text">Bride's Family</h3>
+              <!-- EDITABLE: Bride's Parents -->
+              <p class="parent-name">Mrs. ///////// & Mr. //////</p>
+              <p class="family-relation">
+                Warmly invites you to bless their daughter
+              </p>
+            </div>
+
+            <div class="gold-divider-v"></div>
+
+            <div class="family-side">
+              <h3 class="family-title gold-text">Groom's Family</h3>
+              <!-- EDITABLE: Groom's Parents -->
+              <p class="parent-name">Mrs. ///////// & Mr. //////</p>
+              <p class="family-relation">
+                Warmly invites you to bless their son
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. RSVP & WISHES WALL -->
+      <section id="rsvp-page">
+        <div class="glass-card scrollable-card">
+          <h2 class="section-title gold-text">RSVP & Blessings</h2>
+
+          <div id="rsvp-form-container">
+            <p class="rsvp-tagline">Your presence will double our joy!</p>
+
+            <form id="rsvpForm">
+              <div class="form-group">
+                <label for="guestName"
+                  ><i class="fa-solid fa-user gold-text"></i> Full Name</label
+                >
+                <input
+                  type="text"
+                  id="guestName"
+                  required
+                  placeholder="Enter your name"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="guestPhone"
+                  ><i class="fa-solid fa-phone gold-text"></i> Phone
+                  Number</label
+                >
+                <input
+                  type="tel"
+                  id="guestPhone"
+                  required
+                  placeholder="Enter your phone number"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="guestAttendance"
+                  ><i class="fa-solid fa-circle-check gold-text"></i> Will You
+                  Attend?</label
+                >
+                <!-- EDITABLE: Creative dropdown options for attendance -->
+                <div class="custom-select-container" id="attendanceSelect">
+                  <div class="custom-select-trigger">
+                    <span id="custom-select-label">Select an option</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                  </div>
+                  <div class="custom-options">
+                    <div class="custom-option" data-value="yes-dance">
+                      Absolutely yes! Count me in for the dance floor! 💃
+                    </div>
+                    <div class="custom-option" data-value="yes-food">
+                      Yes, count me in for the delicious food & celebrations! 🥂
+                    </div>
+                    <div class="custom-option" data-value="maybe">
+                      Checking my schedule, but hoping to make it! 🤞
+                    </div>
+                    <div class="custom-option" data-value="no">
+                      Regretfully declining, but sending all my love! ❤️
+                    </div>
+                  </div>
+                  <input type="hidden" id="guestAttendance" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="guestWishes"
+                  ><i class="fa-solid fa-envelope-open-text gold-text"></i>
+                  Blessings & Wishes</label
+                >
+                <textarea
+                  id="guestWishes"
+                  rows="3"
+                  placeholder="Leave a sweet blessing or message for the couple..."
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn-glow-gold" id="btn-submit-rsvp">
+                Send RSVP & Blessings
+              </button>
+            </form>
+          </div>
+
+          <!-- Success Screen -->
+          <div id="rsvp-success" class="rsvp-success-screen hidden">
+            <div class="success-icon">
+              <i class="fa-solid fa-heart gold-heart animate-heart"></i>
+            </div>
+            <h3 class="gold-text">Thank You for Blessing Us! ❤️</h3>
+            <p>Your blessings have been added to our Wishes Wall.</p>
+          </div>
+
+          <!-- Wishes Wall / Guestbook -->
+          <div class="wishes-wall-container">
+            <h3 class="wishes-wall-title gold-text">
+              <i class="fa-solid fa-comments"></i> Wishes Wall
+            </h3>
+            <div class="wishes-loader" id="wishesLoader">
+              <div class="gold-spinner"></div>
+              <p>Loading blessings...</p>
+            </div>
+            <div class="wishes-list" id="wishesList">
+              <!-- Wishes will be loaded here dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- FLOATING MUSIC CONTROL -->
+    <div class="floating-controls">
+      <button id="btn-music-toggle" class="music-btn-spinning">
+        <i class="fa-solid fa-music"></i>
+      </button>
+      <button id="btn-share" class="share-btn">
+        <i class="fa-solid fa-share-nodes"></i>
+      </button>
+    </div>
+
+    <!-- INVISIBLE AUDIO PLAYER -->
+    <!-- EDITABLE: Background Music Track Link (Standard high-quality romantic instrumental) -->
+    <audio id="bg-music" loop preload="auto">
+      <source src="assets/audio/romantic-bg.mp3" type="audio/mp3" />
+    </audio>
+
+    <!-- JS Scripts -->
+    <script src="js/particles.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
