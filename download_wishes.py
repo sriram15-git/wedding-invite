@@ -1,4 +1,5 @@
 import urllib.request
+import urllib.error
 import json
 import os
 
@@ -18,9 +19,20 @@ def download_wishes():
                 json.dump(wishes, f, indent=2, ensure_ascii=False)
                 
             print(f"Success! Sync complete. {len(wishes)} guest RSVPs downloaded and saved locally in '{WISHES_FILE}'!")
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            print("\n[Notice] No guest RSVPs have been submitted on the live site yet.")
+            print("The cloud database is currently empty. Once your guests begin to submit RSVPs, they will appear here.")
+            
+            # Initialize wishes.json as an empty list if it does not exist
+            if not os.path.exists(WISHES_FILE):
+                with open(WISHES_FILE, 'w', encoding='utf-8') as f:
+                    json.dump([], f)
+                print(f"Initialized local database file: '{WISHES_FILE}'")
+        else:
+            print(f"Failed to fetch wishes from cloud (HTTP {e.code}): {e.reason}")
     except Exception as e:
         print(f"Failed to fetch wishes from cloud: {e}")
-        print("Note: If no guest has submitted RSVP yet, the cloud bucket might not be created. Submit a test RSVP on Vercel first!")
 
 if __name__ == '__main__':
     # Set execution directory to the script's directory
