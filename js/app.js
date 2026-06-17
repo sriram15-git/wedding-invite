@@ -12,9 +12,11 @@ const WEDDING_CONFIG = {
   venueName: "Ramakrish Palace, Chennai",
   venueAddress: "110, Grand Southern Trunk Rd, Chromeper, Chennai - 600044",
   // Dynamic switcher: Local file backend when running locally, cloud database when deployed online
-  wishesDbUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? "/api/wishes"
-    : "https://kvdb.io/A4r9M2B8u6c3D1z9fG8p/wedding_karthik_radhika_2026"
+  wishesDbUrl:
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+      ? "/api/wishes"
+      : "https://kvdb.io/A4r9M2B8u6c3D1z9fG8p/wedding_karthik_radhika_2026",
 };
 
 // Default fallback blessings in case db is empty or network is offline
@@ -345,17 +347,29 @@ async function initWishesWall() {
     return localData ? JSON.parse(localData) : DEFAULT_WISHES;
   }
 
-  // Save single wish to local backend file and save full list to localStorage
+  // Save wish to local backend or cloud database depending on environment
   async function saveWish(newWish, wishesArray) {
     localStorage.setItem("wedding_wishes", JSON.stringify(wishesArray));
     try {
-      await fetch(WEDDING_CONFIG.wishesDbUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newWish),
-      });
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      
+      if (isLocal) {
+        // Local: POST single new wish (python server handles appending)
+        await fetch(WEDDING_CONFIG.wishesDbUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newWish),
+        });
+      } else {
+        // Online: PUT full updated wishes array (kvdb.io key-value store)
+        await fetch(WEDDING_CONFIG.wishesDbUrl, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(wishesArray),
+        });
+      }
     } catch (err) {
-      console.warn("Could not save wish to local database file:", err);
+      console.warn("Could not save wish to database:", err);
     }
   }
 
