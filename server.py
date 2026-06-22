@@ -6,9 +6,12 @@ import sys
 PORT = 8000
 WISHES_FILE = 'wishes.json'
 
+import urllib.parse
+
 class WeddingInviteHandler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
-        if self.path == '/api/wishes':
+        parsed_url = urllib.parse.urlparse(self.path)
+        if parsed_url.path == '/api/wishes':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
@@ -26,6 +29,25 @@ class WeddingInviteHandler(http.server.SimpleHTTPRequestHandler):
                 # Initialize empty file with default structure
                 with open(WISHES_FILE, 'w', encoding='utf-8') as f:
                     json.dump([], f)
+            
+            # Check for admin key
+            query_params = urllib.parse.parse_qs(parsed_url.query)
+            admin_key = query_params.get('admin', [''])[0]
+            admin_header = self.headers.get('x-admin-key', '')
+            input_key = admin_key or admin_header
+            
+            actual_admin_key = os.environ.get('ADMIN_KEY', 'my-secret-wedding-key')
+            is_authorized = (input_key == actual_admin_key)
+            
+            # Scrub phone numbers if not authorized
+            if not is_authorized:
+                scrubbed_wishes = []
+                for wish in wishes:
+                    wish_copy = wish.copy()
+                    if 'phone' in wish_copy:
+                        del wish_copy['phone']
+                    scrubbed_wishes.append(wish_copy)
+                wishes = scrubbed_wishes
                     
             self.wfile.write(json.dumps(wishes).encode('utf-8'))
         else:
@@ -33,7 +55,8 @@ class WeddingInviteHandler(http.server.SimpleHTTPRequestHandler):
             super().do_GET()
 
     def do_POST(self):
-        if self.path == '/api/wishes':
+        parsed_url = urllib.parse.urlparse(self.path)
+        if parsed_url.path == '/api/wishes':
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
             

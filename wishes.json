@@ -5,5 +5,12 @@
     "attendance": "yes-food",
     "wishes": "chitha chthi",
     "timestamp": 1781677330634
+  },
+  {
+    "name": "not specified",
+    "phone": "9876543210",
+    "attendance": "not specified",
+    "wishes": "Wishing you both a lifetime of happiness!",
+    "timestamp": 1781298492000
   }
 ]

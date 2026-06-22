@@ -11,12 +11,7 @@ const WEDDING_CONFIG = {
   weddingDate: "2026-08-30T06:30:00",
   venueName: "Ramakrish Palace, Chennai",
   venueAddress: "110, Grand Southern Trunk Rd, Chromeper, Chennai - 600044",
-  // Dynamic switcher: Local file backend when running locally, cloud database when deployed online
-  wishesDbUrl:
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1"
-      ? "/api/wishes"
-      : "https://kvdb.io/A4r9M2B8u6c3D1z9fG8p/wedding_karthik_radhika_2026",
+  wishesDbUrl: "/api/wishes"
 };
 
 // Default fallback blessings in case db is empty or network is offline
@@ -324,22 +319,16 @@ async function initWishesWall() {
     successScreen.classList.remove("hidden");
   }
 
-  // Load existing wishes from KVDB.io cloud database (with local fallback)
+  // Load existing wishes from the API endpoint
   async function fetchWishes() {
     try {
       const response = await fetch(WEDDING_CONFIG.wishesDbUrl);
       if (response.ok) {
         const data = await response.json();
         return Array.isArray(data) ? data : [];
-      } else if (response.status === 404) {
-        // DB not created yet, return defaults
-        return DEFAULT_WISHES;
       }
     } catch (err) {
-      console.warn(
-        "Unable to connect to Wishes Database, using local storage fallback:",
-        err,
-      );
+      console.warn("Unable to connect to Wishes Database, using local storage fallback:", err);
     }
 
     // Fallback: local storage
@@ -347,27 +336,15 @@ async function initWishesWall() {
     return localData ? JSON.parse(localData) : DEFAULT_WISHES;
   }
 
-  // Save wish to local backend or cloud database depending on environment
+  // Save wish to the backend wishes API (handles local wishes.json or Vercel KV dynamically)
   async function saveWish(newWish, wishesArray) {
     localStorage.setItem("wedding_wishes", JSON.stringify(wishesArray));
     try {
-      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      
-      if (isLocal) {
-        // Local: POST single new wish (python server handles appending)
-        await fetch(WEDDING_CONFIG.wishesDbUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newWish),
-        });
-      } else {
-        // Online: PUT full updated wishes array (kvdb.io key-value store)
-        await fetch(WEDDING_CONFIG.wishesDbUrl, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(wishesArray),
-        });
-      }
+      await fetch(WEDDING_CONFIG.wishesDbUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newWish),
+      });
     } catch (err) {
       console.warn("Could not save wish to database:", err);
     }
@@ -413,22 +390,33 @@ async function initWishesWall() {
   let currentWishes = await fetchWishes();
   renderWishes(currentWishes);
 
+  // Helper to encrypt phone number client-side using simple XOR and Base64.
+  // This protects guest phone numbers from being visible in plain text on Vercel's KV DB or network requests.
+  function encryptPhone(text, key) {
+    if (!text) return "not specified";
+    // Sanitize to only allow numbers, spaces, and common phone characters
+    const cleaned = text.replace(/[^0-9+\-\s()]/g, '');
+    let result = "";
+    for (let i = 0; i < cleaned.length; i++) {
+      const charCode = cleaned.charCodeAt(i) ^ key.charCodeAt(i % key.length);
+      result += String.fromCharCode(charCode);
+    }
+    return btoa(result);
+  }
+
   // Form submission handler
   rsvpForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById("guestName").value.trim();
-    const phone = document.getElementById("guestPhone").value.trim();
-    const attendance = document.getElementById("guestAttendance").value;
-    const wishes = document.getElementById("guestWishes").value.trim();
+    const nameInput = document.getElementById("guestName").value.trim();
+    const phoneInput = document.getElementById("guestPhone").value.trim();
+    const attendanceInput = document.getElementById("guestAttendance").value;
+    const wishesInput = document.getElementById("guestWishes").value.trim();
 
-    // Custom Validation for Custom Select Dropdown
-    if (!attendance) {
-      alert("Please select your attendance status! ✦");
-      return;
-    }
-
-    if (!name) return;
+    const name = nameInput || "not specified";
+    const attendance = attendanceInput || "not specified";
+    const wishes = wishesInput || "not specified";
+    const phone = phoneInput ? encryptPhone(phoneInput, "KarthikRadhika2026") : "not specified";
 
     // Create new wish object (exclude phone from wishes wall list for privacy)
     const newWish = {
