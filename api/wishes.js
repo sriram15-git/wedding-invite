@@ -1,6 +1,20 @@
 import fs from 'fs';
 import path from 'path';
 
+// Helper to robustly parse wishes list from Vercel KV (handling single/double stringification)
+function parseWishes(wishesStr) {
+  if (!wishesStr) return [];
+  try {
+    let parsed = JSON.parse(wishesStr);
+    if (typeof parsed === 'string') {
+      parsed = JSON.parse(parsed);
+    }
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    return [];
+  }
+}
+
 // If running on Vercel with KV database attached
 const KV_REST_API_URL = process.env.KV_REST_API_URL;
 const KV_REST_API_TOKEN = process.env.KV_REST_API_TOKEN;
@@ -41,8 +55,7 @@ export default async function handler(req, res) {
         });
         if (response.ok) {
           const result = await response.json();
-          const wishesStr = result.result;
-          wishes = wishesStr ? JSON.parse(wishesStr) : [];
+          wishes = parseWishes(result.result);
         } else {
           return res.status(500).json({ error: "Failed to read from Vercel KV" });
         }
@@ -86,7 +99,7 @@ export default async function handler(req, res) {
         });
         if (getRes.ok) {
           const result = await getRes.json();
-          wishes = result.result ? JSON.parse(result.result) : [];
+          wishes = parseWishes(result.result);
         }
 
         // Append new wish
